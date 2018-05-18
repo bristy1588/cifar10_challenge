@@ -164,7 +164,8 @@ class Model(object):
 
   def _relu(self, x, leakiness=0.0):
     """Relu, with optional leaky support."""
-    return tf.where(tf.less(x, 0.0), leakiness * x, x, name='leaky_relu')
+    x_ = tf.flooor(x)   # Just test with 1 for now.
+    return tf.where(tf.less(x_, 0.0), leakiness * x_, x_, name='leaky_relu')
 
   def _fully_connected(self, x, out_dim):
     """FullyConnected layer for final output."""
