@@ -100,30 +100,30 @@ with tf.Session() as sess:
 
     # Compute Adversarial Perturbations
     start = timer()
-    x_batch_adv = attack.perturb(x_batch, y_batch, sess)
+    #x_batch_adv = attack.perturb(x_batch, y_batch, sess)
     end = timer()
     training_time += end - start
 
     nat_dict = {model.x_input: x_batch,
                 model.y_input: y_batch}
 
-    adv_dict = {model.x_input: x_batch_adv,
-                model.y_input: y_batch}
+    #adv_dict = {model.x_input: x_batch_adv,
+    #            model.y_input: y_batch}
 
     # Output to stdout
     if ii % num_output_steps == 0:
       nat_acc = sess.run(model.accuracy, feed_dict=nat_dict)
-      adv_acc = sess.run(model.accuracy, feed_dict=adv_dict)
+      #adv_acc = sess.run(model.accuracy, feed_dict=adv_dict)
       print('Step {}:    ({})'.format(ii, datetime.now()))
       print('    training nat accuracy {:.4}%'.format(nat_acc * 100))
-      print('    training adv accuracy {:.4}%'.format(adv_acc * 100))
+      #print('    training adv accuracy {:.4}%'.format(adv_acc * 100))
       if ii != 0:
         print('    {} examples per second'.format(
             num_output_steps * batch_size / training_time))
         training_time = 0.0
     # Tensorboard summaries
     if ii % num_summary_steps == 0:
-      summary = sess.run(merged_summaries, feed_dict=adv_dict)
+      summary = sess.run(merged_summaries, feed_dict=nat_dict)  # was adv_dict
       summary_writer.add_summary(summary, global_step.eval(sess))
 
     # Write a checkpoint
@@ -134,6 +134,6 @@ with tf.Session() as sess:
 
     # Actual training step
     start = timer()
-    sess.run(train_step, feed_dict=adv_dict)
+    sess.run(train_step, feed_dict=nat_dict)  # was adv_dict
     end = timer()
     training_time += end - start
