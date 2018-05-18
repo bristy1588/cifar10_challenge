@@ -164,7 +164,8 @@ class Model(object):
 
   def _relu(self, x, leakiness=0.0):
     """Relu, with optional leaky support."""
-    x_ = tf.flooor(x)   # Just test with 1 for now.
+    #x_ = tf.floor(x)   # Just test with 1 for now.
+    x_ = x
     return tf.where(tf.less(x_, 0.0), leakiness * x_, x_, name='leaky_relu')
 
   def _fully_connected(self, x, out_dim):
