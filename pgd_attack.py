@@ -84,12 +84,12 @@ if __name__ == '__main__':
     print('No model found')
     sys.exit()
 
-  current_epsilon = config['epsilon']
+
   args = parser.parse_args()
   current_eps = args.EPS
   model = Model(mode='eval')
   attack = LinfPGDAttack(model,
-                         current_epsilon,
+                         current_eps,
                          config['num_steps'],
                          config['step_size'],
                          config['random_start'],
@@ -115,6 +115,7 @@ if __name__ == '__main__':
     for ibatch in range(num_batches):
       bstart = ibatch * eval_batch_size
       bend = min(bstart + eval_batch_size, num_eval_examples)
+      print("Batch Number :", ibatch)
       print('batch size: {}'.format(bend - bstart))
 
       x_batch = cifar.eval_data.xs[bstart:bend, :]
