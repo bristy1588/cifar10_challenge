@@ -12,6 +12,12 @@ import numpy as np
 
 import cifar10_input
 
+
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("EPS", type=float, help="Epsilon to Perturb")
+
+
 class LinfPGDAttack:
   def __init__(self, model, epsilon, num_steps, step_size, random_start, loss_func):
     """Attack parameter initialization. The attack performs k steps of
@@ -22,7 +28,9 @@ class LinfPGDAttack:
     self.num_steps = num_steps
     self.step_size = step_size
     self.rand = random_start
-
+    print ("    ")
+    print("    Using EPSILON :: ", self.epsilon)
+    print("    ")
     if loss_func == 'xent':
       loss = model.xent
     elif loss_func == 'cw':
@@ -76,9 +84,12 @@ if __name__ == '__main__':
     print('No model found')
     sys.exit()
 
+  current_epsilon = config['epsilon']
+  args = parser.parse_args()
+  current_eps = args.EPS
   model = Model(mode='eval')
   attack = LinfPGDAttack(model,
-                         config['epsilon'],
+                         current_epsilon,
                          config['num_steps'],
                          config['step_size'],
                          config['random_start'],
